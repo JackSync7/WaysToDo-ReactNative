@@ -13,9 +13,33 @@ import { Text, Box,
 import  Login  from "../images/login.png"
 // import  LoginTitle  from "../images/loginTitle.png"
 import { Image, StyleSheet } from 'react-native'
+import { useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useEffect } from "react";
 
 export default function LoginPage ({ navigation }) {
-    // const img = require('../images/Login.png');
+    
+    const [isLogin, setIsLogin] = useState("false");
+    
+    const checkLogin = async () => {
+      try {
+        const response = await AsyncStorage.getItem("isLogin");
+        if (response) {
+          setIsLogin(response)
+        } 
+        console.log(response)
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    console.log(isLogin)
+    useEffect(() => {
+      checkLogin()
+      if(isLogin === "true"){
+        navigation.navigate("Home")
+     }
+    }, [isLogin])
+
     return (
 
         <Box safeArea >

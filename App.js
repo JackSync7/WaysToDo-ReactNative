@@ -1,6 +1,7 @@
 import React from "react"
 import { NativeBaseProvider, extendTheme } from "native-base"
 import AppLoading from "expo-app-loading"
+import { QueryClient, QueryClientProvider } from "react-query";
 import {
   useFonts,
   Poppins_100Thin,
@@ -25,6 +26,7 @@ import {
 import Container from "./container"
 
 export default function App() {
+  const client = new QueryClient()
   let [fontsLoaded] = useFonts({
     Poppins_100Thin,
     Poppins_100Thin_Italic,
@@ -80,9 +82,11 @@ export default function App() {
   } else {
     return (
       <>
-        <NativeBaseProvider theme={theme}>
-          <Container />
-        </NativeBaseProvider>
+        <QueryClientProvider client={client}>
+          <NativeBaseProvider theme={theme}>
+            <Container />
+          </NativeBaseProvider>
+        </QueryClientProvider>
       </>
     )
   }

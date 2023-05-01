@@ -9,6 +9,7 @@ import Detail from "./src/components/detail"
 import NavButton from "./src/components/NavButton";
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
+import ListTodo from "./src/components/ListTodo";
 
 const Stack = createStackNavigator()
 
@@ -23,7 +24,7 @@ export default function Container() {
                 component={LoginPage}
             />
             <Stack.Screen 
-                name="Main"
+                name="Home"
                 component={Home}
             />
             <Stack.Screen 
@@ -39,8 +40,8 @@ export default function Container() {
                 component={Register}
             />
             <Stack.Screen 
-                name="NavButton"
-                component={NavButton}
+                name="ListTodo"
+                component={ListTodo}
             />
         </Stack.Navigator>
     </NavigationContainer>
