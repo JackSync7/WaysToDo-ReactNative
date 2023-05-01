@@ -3,7 +3,7 @@ import { Box, Text, HStack, VStack, ScrollView, Image, Select, Flex, Input, Pres
 import { useState, useEffect } from "react";
 import { MaterialCommunityIcons, AntDesign, Feather } from "@expo/vector-icons"; 
 import { API } from "../config/Api"
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
@@ -28,18 +28,54 @@ export default function ListTodo({navigation}) {
             console.log(err)
         }
     }
-    const DeleteList = async () => {
+    
+    const cekLogin = async () => {
         try {
-            const res = await API.delete("/todolists")
-           
-            setTodoList(res.data)
+            const response = await AsyncStorage.getItem("isLogin")
+            if(!response){
+                console.log("ini status : " + response)
+                navigation.navigate("Login")
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    };
+    const DeleteList = async (idList) => {
+        try {
+            const res = await API.delete(`/todolists/${idList}`)
+            alert("delete completed")
+            refetch()
         }catch(err){
             console.log(err)
         }
     }
+
+    const handleUpdateStatus = useMutation( async (idList) => {
+        try{
+            const result = await API.patch(`/todolists/${idList}`, {status: "1"})
+            console.log(result)
+            refetch()
+        }catch(err){
+            console.log(err)
+        }
+    })
+    const handleUpdateStatusFalse = useMutation( async (idList) => {
+        try{
+            const result = await API.patch(`/todolists/${idList}`, {status: "0"})
+            console.log(result)
+            refetch()
+        }catch(err){
+            console.log(err)
+        }
+    })
+
 useEffect(() => {
     getData()
     refetch()
+}, [])
+useEffect(() => {
+    cekLogin()
+    
 }, [])
 
 // const dataCat = async (id) => {
@@ -100,19 +136,29 @@ const logout = async () => {
                     </Select> */}
                 </HStack>
             </VStack>
-            <HStack mx="auto" w="100%" style={{display: "flex", justifyContent: "space-around"}}>
-            <MaterialCommunityIcons name="delete" size={32} color="#D21312" />
+            <HStack pb={2} mx="auto" w="100%" style={{display: "flex", justifyContent: "space-around"}}>
+            <Pressable onPress={()=> setDeleteMode(!deleteMode)}>
+                <MaterialCommunityIcons name="delete" size={32} color="#D21312" />
+            </Pressable>
             <Pressable onPress={() => refetch()}>
-            <Feather name="refresh-ccw" size={32} color="black" />
+                <Feather name="refresh-ccw" size={32} color="black" />
             </Pressable>
             </HStack>
         <ScrollView  h="70%">
             <VStack style={{display: "flex", flexDirection: "column-reverse"}}>
         {!isLoading && dataTodo?.map((data, i) => (
-            <Box  bgColor={arrColor[i]} shadow={2} mt={5} w={"85%"} p={5} mx={"auto"} borderRadius={"2xl"}> 
+            <Box  bgColor={arrColor[i]} shadow={2} mt={5} w={"85%"} p={5} mx={"auto"} borderRadius={"xl"}> 
                 <Box key={i}> 
                     <HStack >
-                        <VStack w={"3/4"} > 
+                        {deleteMode && (
+                        <Box my={"auto"} mr={3}>
+                             {/* =======================Delete List======================== */}
+                            <Pressable onPress={()=> DeleteList(data._id)}>
+                            <MaterialCommunityIcons name="delete" size={32} color="#D21312" />
+                            </Pressable>
+                        </Box>
+                        )}
+                        <VStack maxW={"4/6"} > 
                             <Heading onPress={()=> navigation.navigate("Detail", 
                             {idTodo: data._id, idCate: data.categoryId.map((cate) => cate._id)})} 
                             style={{fontWeight: "bold"}} size={"lg"} >{data.title}</Heading>
@@ -129,11 +175,15 @@ const logout = async () => {
                                 </Text>
                             </Box>
                             <Box mx={"auto"} my={"auto"}>
+                                {/* ===============ini status================ */}
                                 {data?.status === "0" ? 
-                                <Pressable onPress={()=> handleUpdateStatus}>
+                                <Pressable onPress={()=> handleUpdateStatus.mutate(data._id)}>
                                     <AntDesign name="exclamationcircleo" size={48} color="gray" />
                                 </Pressable>
-                                : <AntDesign name="checkcircle" size={48} color="green" />}
+                                : 
+                                <Pressable onPress={()=> handleUpdateStatusFalse.mutate(data._id)}>
+                                    <AntDesign name="checkcircle" size={48} color="green" />
+                                </Pressable>}
                             </Box>
                         </VStack>
                     </HStack>

@@ -61,7 +61,11 @@ const theme = useTheme()
         tabBarInactiveTintColor: theme.colors.muted["800"],
       })}
         >
-      <Tab.Screen name="List Todo" component={ListTodo} />
+      <Tab.Screen name="List Todo" component={ListTodo} options={{
+                    title: "",
+                    unmountOnBlur: true
+
+                }} />
       <Tab.Screen name="Add Todo" component={AddTodo} />
       <Tab.Screen name="Add Category" component={AddCategory} />
 

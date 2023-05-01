@@ -26,6 +26,7 @@ export default function Container() {
             <Stack.Screen 
                 name="Home"
                 component={Home}
+                
             />
             <Stack.Screen 
                 name="Detail"

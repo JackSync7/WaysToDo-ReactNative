@@ -124,9 +124,11 @@ const [form, setForm] = useState(
                         </HStack>
                     </FormControl>
                    
-                    <FormControl mx={"auto"} mt={5} maxW="300" isRequired isInvalid>
+                    <FormControl mx={"auto"}  mt={5} maxW="420" isRequired isInvalid>
                     
                       <SelectList 
+                      
+                      style={{width: "100%"}}
                       setSelected={(key) => setSelected(key)} 
                       data={data()} 
                       save="key"
