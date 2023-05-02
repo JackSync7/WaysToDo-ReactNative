@@ -1,6 +1,6 @@
 import { Box, Text, VStack, Input, FormControl, Flex, Option, Button, HStack, Select } from "native-base";
 import { LoginIcon } from "../images/LoginIcon.png"
-import { Image, StyleSheet } from 'react-native'
+import { Image, StyleSheet, Pressable } from 'react-native'
 import React, { useState } from "react";
 import { FontAwesome } from '@expo/vector-icons'; 
 import { API, setAuthToken } from "../config/Api"
@@ -73,14 +73,13 @@ const [form, setForm] = useState(
       setForm({
         ...form,
         ['categoryId']: [selected],
-
       });
     }, [selected])
+
     useEffect(() => {
       setForm({
         ...form,
         ['date']: dateResult,
-
       });
     }, [date])
     
@@ -136,7 +135,9 @@ const [form, setForm] = useState(
                       />
                   
                   </FormControl>
-                  
+                  <Pressable onClick={() => alert("ahhh")}>
+                    <Text>press Me</Text>
+                  </Pressable>
                     
                     {showPicker && (
                     <DateTimePicker mode="date" display="spinner" value={date} onChange={onChangePicker}

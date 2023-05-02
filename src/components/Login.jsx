@@ -65,6 +65,8 @@ export default function Login({ navigation }) {
           if (response) {
             await AsyncStorage.setItem("token", response.data.token);
             await AsyncStorage.setItem("isLogin", "true");
+            await AsyncStorage.setItem("user", JSON.stringify(response.data.user.firstName));
+            console.log("cek nama : ", response.data.user.firstName)
             logCheck();
           }
           alert("Berhasil Login", form);

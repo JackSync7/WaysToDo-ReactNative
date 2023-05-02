@@ -64,12 +64,9 @@ const theme = useTheme()
       <Tab.Screen name="List Todo" component={ListTodo} options={{
                     title: "",
                     unmountOnBlur: true
-
                 }} />
       <Tab.Screen name="Add Todo" component={AddTodo} />
       <Tab.Screen name="Add Category" component={AddCategory} />
-
-      {/* <Tab.Screen name="Settings" component={SettingsScreen} /> */}
     </Tab.Navigator>
     )
 }
